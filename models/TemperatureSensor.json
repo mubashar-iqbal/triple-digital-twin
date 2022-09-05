@@ -1,0 +1,29 @@
+{
+    "@context": "dtmi:dtdl:context;2",
+    "@id": "dtmi:com:robot:digitalroboticarm:arm:roboticarm:temperature_device;1",
+    "@type": "Interface",
+    "displayName": "Temperature Sensor Interface Model",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "id",
+            "schema": "string",
+            "description": "Device Id",
+            "writable": true
+        },
+        {
+            "@type": "Property",
+            "name": "temperature",
+            "schema": "double",
+            "description": "Current measured temperature",
+            "writable": true
+        },
+        {
+            "@type": "Property",
+            "name": "temperatureAlert",
+            "schema": "boolean",
+            "description": "outside of desired temperature alert",
+            "writable": true
+        }
+    ]
+}
