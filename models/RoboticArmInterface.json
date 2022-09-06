@@ -1,5 +1,5 @@
 {
-    "@id": "dtmi:com:robot:digitalroboticarm:arm:roboticarm;1",
+    "@id": "dtmi:robot:digitalroboticarm;1",
     "@type": "Interface",
     "displayName": "Robotic Arm Interface Model",
     "@context": "dtmi:dtdl:context;2",
@@ -33,17 +33,17 @@
         },
         {
             "@type": "Relationship",
-            "@id": "dtmi:com:robot:digitalroboticarm:arm:roboticarm:rel_has_temperature_sensors;1",
+            "@id": "dtmi:robot:digitalroboticarm:rel_has_temperature_sensors;1",
             "name": "rel_has_temperature_sensors",
-            "displayName": "Has devices",
-            "target": "dtmi:com:robot:digitalroboticarm:arm:roboticarm:temperature_device;1"
+            "displayName": "Has temperature sensors",
+            "target": "dtmi:robot:digitalroboticarm:temperature_sensor;1"
         },
         {
             "@type": "Relationship",
-            "@id": "dtmi:com:robot:digitalroboticarm:arm:roboticarm:rel_has_pressure_sensors;1",
+            "@id": "dtmi:robot:digitalroboticarm:rel_has_pressure_sensors;1",
             "name": "rel_has_pressure_sensors",
-            "displayName": "Has devices",
-            "target": "dtmi:com:robot:digitalroboticarm:arm:roboticarm:pressure_device;1"
+            "displayName": "Has pressure sensors",
+            "target": "dtmi:robot:digitalroboticarm:pressure_sensor;1"
         }
     ]
 }

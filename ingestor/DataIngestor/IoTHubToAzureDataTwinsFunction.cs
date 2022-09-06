@@ -1,5 +1,3 @@
-// Default URL for triggering event grid function in the local environment.
-// http://localhost:7071/runtime/webhooks/EventGrid?functionName={functionname}
 using System;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -17,9 +15,6 @@ using System.Threading.Tasks;
 
 namespace DataIngestor
 {
-    //https://docs.microsoft.com/en-us/azure/digital-twins/how-to-authenticate-client#write-application-code
-    //https://docs.microsoft.com/en-us/azure/digital-twins/how-to-ingest-iot-hub-data?tabs=cli#create-a-function
-
     public static class IoTHubToAzureDataTwinsFunction
     {
         private static readonly string adtInstanceUrl = Environment.GetEnvironmentVariable("ADT_SERVICE_URL");
@@ -40,29 +35,50 @@ namespace DataIngestor
                     new Uri(adtInstanceUrl),
                     cred,
                     new DigitalTwinsClientOptions { Transport = new HttpClientTransport(httpClient) });
+               
                 log.LogInformation($"ADT service client connection created.");
 
                 if (eventGridEvent != null && eventGridEvent.Data != null)
                 {
                     log.LogInformation(eventGridEvent.Data.ToString());
 
-                    // <Find_device_ID_and_temperature>
                     JObject deviceMessage = (JObject)JsonConvert.DeserializeObject(eventGridEvent.Data.ToString());
                     
-                    // log.LogInformation($"Device:{deviceMessage}");
-                    
                     string deviceId = (string)deviceMessage["systemProperties"]["iothub-connection-device-id"];
-                    var temperature = deviceMessage["body"]["temperature"];
-                    var temperatureAlert = deviceMessage["body"]["temperatureAlert"];
-                    
-                    // log.LogInformation($"Device:{deviceMessage}");
-                    log.LogInformation($"Device:{deviceId} Temperature is:{temperature}, Temp Alert is: {temperatureAlert}");
+                    double temperature = (double)deviceMessage["body"]["temperature"];
+                    string temperatureAlert = "Low";
+                    string deviceState = "Funcational";
 
-                    // <Update_twin_with_device_temperature>
+                    double temperatureMaxthreshold = 50;
+                    double temperatureMinthreshold = 30;
+
+                    if (temperature > temperatureMaxthreshold)
+                    {
+                        temperatureAlert = "High";
+                    }
+                    else if (temperature <= temperatureMaxthreshold && temperature > temperatureMinthreshold+(temperatureMinthreshold/2))
+                    {
+                        temperatureAlert = "Medium";
+                    }
+                    else if (temperature < temperatureMinthreshold+(temperatureMinthreshold/2) && temperature >= temperatureMinthreshold)
+                    {
+                        temperatureAlert = "Normal";
+                    }
+
+                    if (temperature < temperatureMinthreshold)
+                    {
+                        deviceState = "Non-functional";
+                    }
+                    
+                    log.LogInformation($"Device: {deviceId} Temperature is: {temperature}, Temp Alert is: {temperatureAlert}, Device state is: {deviceState}");
+
                     // https://docs.microsoft.com/en-us/azure/digital-twins/how-to-manage-twin
+                    
                     var updateTwinData = new JsonPatchDocument();
-                    updateTwinData.AppendAdd("/temperature", temperature.Value<double>());
-                    updateTwinData.AppendAdd("/temperatureAlert", temperatureAlert.Value<bool>());
+                    updateTwinData.AppendAdd("/Id", deviceId);
+                    updateTwinData.AppendAdd("/Temperature", temperature);
+                    updateTwinData.AppendAdd("/TemperatureAlert", temperatureAlert);
+                    updateTwinData.AppendAdd("/DeviceState", deviceState);
                     await client.UpdateDigitalTwinAsync(deviceId, updateTwinData).ConfigureAwait(false);
                 }
             }

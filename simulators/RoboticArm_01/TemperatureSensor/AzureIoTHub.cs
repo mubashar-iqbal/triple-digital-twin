@@ -15,25 +15,15 @@ namespace TemperatureSensor
     public static class AzureIoTHub
     {
         private static int taskDelay = 10 * 1000;
-        //#####################################################################
-        //Replace Hub Name, hub Shared Access Key, and then the device shared access keys
-        //  if you have different names for your devices, update those as well
-        //#####################################################################
+        
         private static string hubName = ConfigurationManager.AppSettings.Get("hubName");
         private static string hubSharedAccessKey = ConfigurationManager.AppSettings.Get("hubSharedAccessKey");
 
         private static string deviceName = ConfigurationManager.AppSettings.Get("deviceName");
         private static string deviceSharedAccessKey = ConfigurationManager.AppSettings.Get("deviceSharedAccessKey");
 
-        //these are composed from the above values
         private static string iotHubConnectionString = @$"HostName={hubName}.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey={hubSharedAccessKey}";
-
         private static string deviceConnectionString = $"HostName={hubName}.azure-devices.net;DeviceId={deviceName};SharedAccessKey={deviceSharedAccessKey}";
-
-        
-        //#####################################################################
-        //Replace these for the correct device simulation
-        //#####################################################################
 
         private static string deviceId = deviceName;
 
@@ -57,23 +47,22 @@ namespace TemperatureSensor
         {
             var deviceClient = DeviceClient.CreateFromConnectionString(deviceConnectionString);
 
-            double avgTemperature = 2.0D;
+            double minimumTemperature = 25.0D;
             var rand = new Random();
 
             while (!cancelToken.IsCancellationRequested)
             {
-                double currentTemperatureLocal = avgTemperature + rand.NextDouble() * 4;
+                double currentTemperature = minimumTemperature + rand.NextDouble() * 4;
 
                 if (DateTime.Now.Millisecond % 2 == 0)
                 {
-                    currentTemperatureLocal = 37.0D;
+                    currentTemperature = 35.0D + rand.NextDouble() * 32;
                 }
 
                 var telemetryDataPoint = new RoboticArmTelemetry
                 {
                     id = deviceId,
-                    temperature = currentTemperatureLocal,
-                    temperatureAlert = currentTemperatureLocal > 30.0D
+                    temperature = currentTemperature
                 };
                 var messageString = JsonSerializer.Serialize(telemetryDataPoint);
 
@@ -83,10 +72,9 @@ namespace TemperatureSensor
                     ContentEncoding = "utf-8"
                 };
                 await deviceClient.SendEventAsync(message);
-                Console.WriteLine($"{DateTime.Now} > Sending message: {messageString}");
                 
-                //Keep this value above 1000 to keep a safe buffer above the ADT service limits
-                //See https://aka.ms/adt-limits for more info
+                Console.WriteLine($"{DateTime.Now} > Sending message: {messageString}");
+
                 await Task.Delay(taskDelay);
             }
         }
@@ -107,6 +95,7 @@ namespace TemperatureSensor
 
                 var messageData = Encoding.ASCII.GetString(receivedMessage.GetBytes());
                 await deviceClient.CompleteAsync(receivedMessage);
+
                 return messageData;
             }
         }
