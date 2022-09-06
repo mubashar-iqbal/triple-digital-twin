@@ -6,7 +6,7 @@
     "contents": [
         {
             "@type": "Property",
-            "name": "id",
+            "name": "Id",
             "schema": "string",
             "description": "Robotic Arm ID",
             "writable": true
@@ -15,16 +15,16 @@
             "@type": "Property",
             "name": "RoboticArmLocation",
             "schema": {
-                "@id": "dtmi:com:robot:digitalroboticarm:custom_schema:roboticarmlocation;1",
+                "@id": "dtmi:robot:digitalroboticarm:custom_schema:roboticarmlocation;1",
                 "@type": "Object",
                 "fields": [
                     {
-                        "@id": "dtmi:com:robot:digitalroboticarm:custom_schema:roboticarmlocation:lat;1",
+                        "@id": "dtmi:robot:digitalroboticarm:custom_schema:roboticarmlocation:lat;1",
                         "name": "Latitude",
                         "schema": "double"
                     },
                     {
-                        "@id": "dtmi:com:robot:digitalroboticarm:custom_schema:roboticarmlocation:lon;1",
+                        "@id": "dtmi:robot:digitalroboticarm:custom_schema:roboticarmlocation:lon;1",
                         "name": "Longitude",
                         "schema": "double"
                     }
