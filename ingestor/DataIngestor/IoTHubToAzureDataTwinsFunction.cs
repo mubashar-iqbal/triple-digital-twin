@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Extensions.Logging;
@@ -12,9 +11,22 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Azure;
 using System.Threading.Tasks;
+using Nethereum.Web3;
+using Nethereum.ABI.FunctionEncoding.Attributes;
+using System.Numerics;
 
 namespace DataIngestor
 {
+
+    [FunctionOutput]
+    public class GetTemperatureOutputDTO: IFunctionOutputDTO 
+    {
+        [Parameter("int256", "minTemp", 1)]
+        public virtual BigInteger MinTemp { get; set; }
+        [Parameter("int256", "maxTemp", 2)]
+        public virtual BigInteger MaxTemp { get; set; }
+    }
+    
     public static class IoTHubToAzureDataTwinsFunction
     {
         private static readonly string adtInstanceUrl = Environment.GetEnvironmentVariable("ADT_SERVICE_URL");
@@ -49,8 +61,20 @@ namespace DataIngestor
                     string temperatureAlert = "Low";
                     string deviceState = "Funcational";
 
-                    double temperatureMaxthreshold = 50;
-                    double temperatureMinthreshold = 30;
+                    var web3 = new Web3 ("https://ropsten.infura.io/v3/87931b7ff16a4621b47579bc854d8122");
+                    
+                    var ABI = @"[{'inputs':[],'name':'GetTemperatureThreshold','outputs':[{'internalType':'int256','name':'','type':'int256'},{'internalType':'int256','name':'','type':'int256'}],'stateMutability':'view','type':'function'},{'inputs':[{'internalType':'int256','name':'_minThreshold','type':'int256'},{'internalType':'int256','name':'_maxThreshold','type':'int256'}],'name':'SetTemperatureThreshold','outputs':[],'stateMutability':'nonpayable','type':'function'}]";
+
+                    var contract = web3.Eth.GetContract(ABI, "0xdf1998C0d153A5f56B2BF1d985cdAcc0d26140C1");
+
+                    var temperatureThreshold = contract.GetFunction("GetTemperatureThreshold");
+                    var thresholdValues = await temperatureThreshold.CallDeserializingToObjectAsync<GetTemperatureOutputDTO>();
+
+                    log.LogInformation($"Min temp: {thresholdValues.MinTemp}");
+                    log.LogInformation($"Max temp: {thresholdValues.MaxTemp}");
+
+                    double temperatureMaxthreshold = (double)(thresholdValues.MinTemp > 0 ? thresholdValues.MinTemp : 1);
+                    double temperatureMinthreshold = (double)(thresholdValues.MaxTemp > 0 ? thresholdValues.MaxTemp : 1);
 
                     if (temperature > temperatureMaxthreshold)
                     {
@@ -69,7 +93,7 @@ namespace DataIngestor
                     {
                         deviceState = "Non-functional";
                     }
-                    
+
                     log.LogInformation($"Device: {deviceId} Temperature is: {temperature}, Temp Alert is: {temperatureAlert}, Device state is: {deviceState}");
 
                     // https://docs.microsoft.com/en-us/azure/digital-twins/how-to-manage-twin
