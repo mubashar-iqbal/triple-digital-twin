@@ -24,7 +24,7 @@ We created two simulators for two robotic arms to simultanesouly generate temper
 ```
 ```json
 {
-    "id":"RA01_Temperature_Sensor_02",
+    "id":"RA02_Temperature_Sensor_01",
     "temperature":55.54934268234109
 }
 ```
@@ -35,7 +35,7 @@ The Azure function is used to create the process of ingesting data into the Azur
 Use Microsoft Visual Studio to compile and deploy ingestor to Microsoft Azure cloud using Azure function.
 
 # Solidity Smart Contract
-We create a decentralized application (dApp) on the Ethereum blockchain that assists us in establishing and obtaining safety and security rules, e.g., temperature threshold). We deploy the dApp on the Ethereum Ropsten test network and using the [Nethereum library](http://docs.nethereum.com/en/latest/), we make interactions with the dApp and Ethereum nodes.
+We create a decentralized application (dApp) on the Ethereum blockchain that assists us in establishing and obtaining safety and security rules (e.g., temperature threshold). We deploy the dApp on the Ethereum Ropsten test network and using the [Nethereum library](http://docs.nethereum.com/en/latest/), we make interactions with the dApp and Ethereum nodes.
 
 Smart contract application binary interface (ABI) and connection details are available in: ```ingestor\DataIngestor\IoTHubToAzureDataTwinsFunction.cs```
 
