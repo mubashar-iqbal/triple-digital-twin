@@ -61,7 +61,7 @@ namespace DataIngestor
                     string temperatureAlert = "Low";
                     string deviceState = "Funcational";
 
-                    var web3 = new Web3 ("https://ropsten.infura.io/v3/87931b7ff16a4621b47579bc854d8122");
+                    var web3 = new Web3 ("https://goerli.infura.io/v3/87931b7ff16a4621b47579bc854d8122");
                     
                     var ABI = @"[{'inputs':[],'name':'GetTemperatureThreshold','outputs':[{'internalType':'int256','name':'','type':'int256'},{'internalType':'int256','name':'','type':'int256'}],'stateMutability':'view','type':'function'},{'inputs':[{'internalType':'int256','name':'_minThreshold','type':'int256'},{'internalType':'int256','name':'_maxThreshold','type':'int256'}],'name':'SetTemperatureThreshold','outputs':[],'stateMutability':'nonpayable','type':'function'}]";
 
