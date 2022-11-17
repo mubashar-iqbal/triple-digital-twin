@@ -65,7 +65,7 @@ namespace DataIngestor
                     
                     var ABI = @"[{'inputs':[],'name':'GetTemperatureThreshold','outputs':[{'internalType':'int256','name':'','type':'int256'},{'internalType':'int256','name':'','type':'int256'}],'stateMutability':'view','type':'function'},{'inputs':[{'internalType':'int256','name':'_minThreshold','type':'int256'},{'internalType':'int256','name':'_maxThreshold','type':'int256'}],'name':'SetTemperatureThreshold','outputs':[],'stateMutability':'nonpayable','type':'function'}]";
 
-                    var contract = web3.Eth.GetContract(ABI, "0xdf1998C0d153A5f56B2BF1d985cdAcc0d26140C1");
+                    var contract = web3.Eth.GetContract(ABI, "0x4F88a5f5d0218CcEC426a390FC5b230409ab9869");
 
                     var temperatureThreshold = contract.GetFunction("GetTemperatureThreshold");
                     var thresholdValues = await temperatureThreshold.CallDeserializingToObjectAsync<GetTemperatureOutputDTO>();
