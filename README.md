@@ -1,5 +1,5 @@
 # TRIPLE: A Blockchain-based Digital Twin Framework for Cyber-Physical Systems Security
-TRIPLE framework that leverages and integrates provenance-enabled blockchain solution with simulation mode of digital twins to ensure reliability and traceability of data during data acquisition and dissemination at both physical and virtual environments.
+The TRIPLE framework leverages and integrates provenance-enabled blockchain-based solution with the simulation mode of digital twins to ensure the reliability and traceability of data during data acquisition and dissemination at both physical and virtual environments.
 
 <img src="TRIPLE_framework.png" width="600" alt="Overview of the TRusted and Intelligent cyber-PhysicaL systEm (TRIPLE) framework" title="Overview of the TRusted and Intelligent cyber-PhysicaL systEm (TRIPLE) framework"/>
 
@@ -9,13 +9,13 @@ of the TRIPLE framework and generate a virtual environment to demonstrate how ph
 <img src="ADT-architecture.png" width="600" alt="Overview of robotic arms’ digital twins architecture realized with Microsoft Azure" title="Overview of robotic arms’ digital twins architecture realized with Microsoft Azure"/>
 
 # Models
-Azure Digital Twins provide ability to define vocabulary for building twin graph. This capability is provided through user-provided [models](https://learn.microsoft.com/en-us/azure/digital-twins/concepts-models). Azure Digital Twins models are represented in the JSON-LD-based [Digital Twin Definition Language (DTDL)](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-dtdl). We created two models, one related to robotic arm interface (RoboticArmInterface.json), another defines the temperature sensor (TemperatureSensor.json).
+Azure Digital Twins provide the ability to define vocabulary for building twin graph. This capability is provided through user-provided [models](https://learn.microsoft.com/en-us/azure/digital-twins/concepts-models). Azure Digital Twins models are represented in the JSON-LD-based [Digital Twin Definition Language (DTDL)](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-dtdl). We created two models, one related to robotic arm interface (RoboticArmInterface.json), another defines the temperature sensor (TemperatureSensor.json).
 
 
 # Simulators
 We use a simulator approach to generate and simulate data from two temperature sensors without having the need to configure and manage physical IoT devices. The simulator includes the temperature sensor configurations, robotic arm telemetry, and provides the authentication settings to connect with Azure IoT Hub.
 
-We created two simulators for two robotic arms to simultanesouly generate temperature data from both robotic arms. Navigate to **simulators/RoboticArm_01** and **simulators/RoboticArm_02** directories in two different terminals and execute ```dotnet run``` commad to start simulators. The simulators will generate data for two temperator sensors is json format and send it to the ingestor.
+We created two simulators for two robotic arms to simultaneously generate temperature data from both robotic arms. Navigate to **simulators/RoboticArm_01** and **simulators/RoboticArm_02** directories in two different terminals and execute ```dotnet run```command to start simulators. The simulators will generate data for two temperature sensors is json format and send it to the ingestor.
 ```json
 {
     "id":"RA01_Temperature_Sensor_01",
@@ -40,7 +40,7 @@ We create a decentralized application (dApp) on the Ethereum blockchain that ass
 Smart contract application binary interface (ABI) and connection details are available in: ```ingestor\DataIngestor\IoTHubToAzureDataTwinsFunction.cs```
 
 # Azure digital twin explorer
-Azure Digital Twins explorer is a visual tool for exploring the data in Azure Digital Twins graph. As well as, to view, query, and edit models, twins, and relationships. 
+Azure Digital Twins Explorer is a visual tool for exploring the data in the Azure Digital Twins graph. As well as, to view, query, and edit models, twins, and relationships. 
 
 [Azure Digital Twins Explorer](https://learn.microsoft.com/en-us/azure/digital-twins/concepts-azure-digital-twins-explorer)
 
