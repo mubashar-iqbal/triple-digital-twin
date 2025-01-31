@@ -1,4 +1,7 @@
 # TRIPLE: A Blockchain-based Digital Twin Framework for Cyber-Physical Systems Security
+
+[Research Paper](https://doi.org/10.1016/j.jii.2024.100706)
+
 The TRIPLE framework leverages and integrates provenance-enabled blockchain-based solution with the simulation mode of digital twins to ensure the reliability and traceability of data during data acquisition and dissemination at both physical and virtual environments.
 
 <img src="TRIPLE_framework.jpg" width="800" alt="Overview of the TRusted and Intelligent cyber-PhysicaL systEm (TRIPLE) framework" title="Overview of the TRusted and Intelligent cyber-PhysicaL systEm (TRIPLE) framework"/>
